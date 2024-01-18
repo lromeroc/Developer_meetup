@@ -39,8 +39,16 @@
         permanent: true
         state: enabled
         immediate: true
+    
 
     # - name: Allow the traffic through the firewall
+    - name: Allow the traffic through the firewall
+      ansible.posix.firewalld:
+        port: 5432/tcp
+        permanent: true
+        state: enabled
+        immediate: true
+    
 
     # - name: Create podman container using pgadmin_container
     - name: Create podman container using pgadmin_container
@@ -52,7 +60,8 @@
           PGADMIN_DEFAULT_EMAIL: "{{ pgadmin_container.env.PGADMIN_DEFAULT_EMAIL }}"
           PGADMIN_DEFAULT_PASSWORD: "{{ _pgadmin_default_password_ }}"
         ports:
-          - "{{ pgadmin_container.ports | join(' ') }}"
+          - '{{ pgadmin_container.ports.0 }}:8083:80'
         volumes:
           - /var/lib/pgsql/data:/var/lib/postgresql/data:Z
           - /etc/localtime:/etc/localtime:ro
+
