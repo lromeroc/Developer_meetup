@@ -21,11 +21,6 @@
       wait: true
 
   tasks:
-        # TASK 1
-        # # 1a. Press "ENTER" at the end of the multi-task prompt.
-        # #     Note - The suggestion used the Fully Qualified Collection Name (FQCN).
-        # #     Note - The first task used the correct AWS tag "tag:Name" in the filter.
-        # #     Note - The second task used the correct variable created in the previous task.
 
     # Gather info from subnet called subnet-lightspeed & create vpc_subnet_id var
     - name: Gather info from subnet called subnet-lightspeed
@@ -37,10 +32,6 @@
     - name: Create vpc_subnet_id var
       ansible.builtin.set_fact:
         vpc_subnet_id: "{{ subnet_info.subnets[0].id }}"
-    
-        # TASK 2
-        # # 2a. Uncomment the single-task prompt
-        # #     Note - The suggestion used the "ec2_instance" variable declared in the "vars:" section.
 
     # - name: Provision t3.small instance using ec2_instance var
     - name: Provision t3.small instance using ec2_instance var
@@ -56,14 +47,6 @@
         tags: "{{ ec2_instance.tags }}"
       register: ec2_instance_info
 
-
-
-        # TASK 3
-        # # 3a. Press "ENTER" at the end of the multi-task prompt.
-        # #     Note - The suggestion used the correct variable from the previous task.
-        # #     Note - The second task used the "public_ip_address" variable based on the previous task.
-        # #     First task note - The suggestion used the correct variable from the previous task and integrated "retries".
-        # #     Second task note - The suggestion used the "public_ip_address" variable based on the previous task.
 
     # Create var from public_ip_address with retry & print it out
     - name: Create var from public_ip_address with retry
