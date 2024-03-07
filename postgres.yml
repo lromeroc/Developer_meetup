@@ -1,6 +1,6 @@
 ---
 - name: Configure Database servers
-  hosts: rhel
+  hosts: all
   become: true
 
   vars:
