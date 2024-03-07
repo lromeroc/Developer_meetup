@@ -1,0 +1,17 @@
+---
+- name: Configure Database servers
+  hosts: rhel
+  become: true
+
+  tasks:
+
+    - name: Stop the service
+      ansible.builtin.service:
+        name: postgresql
+        state: stopped
+        enabled: true
+
+    - name: Remove postgresql-server
+      ansible.builtin.package:
+        name: postgresql-server
+        state: absent
