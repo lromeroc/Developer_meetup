@@ -8,11 +8,15 @@
       name: pgadmin
       image: docker.io/dpage/pgadmin4
       state: started
+      volumes:
+        - /etc/localtime:/etc/localtime:ro
       env:
         PGADMIN_DEFAULT_EMAIL: student@example.com
         PGADMIN_DEFAULT_PASSWORD: learn_ansible
       ports:
         - 8083:80
+      log_options:
+        max_size: 10
 
   tasks:
     # - name: Install postgresql-server
@@ -39,7 +43,7 @@
         permanent: true
         state: enabled
         immediate: true
-    
+
 
     # - name: Allow the traffic through the firewall
     - name: Allow the traffic through the firewall
@@ -48,7 +52,7 @@
         permanent: true
         state: enabled
         immediate: true
-    
+
 
     # - name: Create podman container using pgadmin_container
     - name: Create podman container using pgadmin_container
@@ -56,12 +60,9 @@
         name: pgadmin
         image: "{{ pgadmin_container.image }}"
         state: started
-        env:
-          PGADMIN_DEFAULT_EMAIL: "{{ pgadmin_container.env.PGADMIN_DEFAULT_EMAIL }}"
-          PGADMIN_DEFAULT_PASSWORD: "{{ _pgadmin_default_password_ }}"
-        ports:
-          - '{{ pgadmin_container.ports.0 }}:8083:80'
-        volumes:
-          - /var/lib/pgsql/data:/var/lib/postgresql/data:Z
-          - /etc/localtime:/etc/localtime:ro
-
+        volumes: "{{ pgadmin_container.volumes }}"
+        env: "{{ pgadmin_container.env }}"
+        ports: "{{ pgadmin_container.ports }}"
+        log_options: "{{ pgadmin_container.log_options }}"
+        log_driver: journald
+        
