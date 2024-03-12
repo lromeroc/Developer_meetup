@@ -3,3 +3,5 @@ collections:
   - name: amazon.aws
   - name: ansible.posix
   - name: containers.podman
+  - name: azure.azcollection
+  - name: community.crypto
