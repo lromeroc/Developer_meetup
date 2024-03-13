@@ -23,10 +23,10 @@
 
   tasks:
 
-    - name: Create a VM called vm-lightspeed using vm_config var
+    - name: Create a VM called vm-lightspeed-test using vm_config var
       azure.azcollection.azure_rm_virtualmachine:
         resource_group: "{{ vm_config.resource_group }}"
-        name: vm-lightspeed
+        name: vm-lightspeed-test
         vm_size: "{{ vm_config.vm_size }}"
         admin_username: "{{ vm_config.admin_username }}"
         ssh_password_enabled: "{{ vm_config.ssh_password_enabled }}"
