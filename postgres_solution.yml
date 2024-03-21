@@ -39,9 +39,9 @@
         state: started
         enabled: true
 
-    - name: Allow the traffic through the firewall
-      ansible.posix.firewalld:
-        port: 5432/tcp
-        permanent: true
-        state: enabled
-        immediate: true
+    # - name: Allow the traffic through the firewall
+    #   ansible.posix.firewalld:
+    #     port: 5432/tcp
+    #     permanent: true
+    #     state: enabled
+    #     immediate: true
