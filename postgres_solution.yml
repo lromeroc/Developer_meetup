@@ -25,8 +25,8 @@
       ansible.builtin.package:
         name: postgresql-server
         state: present
-    
-    
+
+
     # Do the initial postgresql config & start the service & allow the traffic through the firewall
     - name: Do the initial postgresql config
       ansible.builtin.command: postgresql-setup initdb
@@ -45,7 +45,3 @@
         permanent: true
         state: enabled
         immediate: true
-    
-    # - name: Allow the traffic through the firewall
-
-    # - name: Create podman container using pgadmin_container
