@@ -1,0 +1,29 @@
+---
+- name: Configure Database servers
+  hosts: rhel
+  become: true
+
+  # vars:
+  #   pgadmin_container:
+  #     name: pgadmin
+  #     image: docker.io/dpage/pgadmin4
+  #     state: started
+  #     volumes:
+  #       - /etc/localtime:/etc/localtime:ro
+  #     env:
+  #       PGADMIN_DEFAULT_EMAIL: student@example.com
+  #       PGADMIN_DEFAULT_PASSWORD: learn_ansible
+  #     ports:
+  #       - 8083:80
+  #     log_options:
+  #       max_size: 10
+
+  tasks:
+
+    # - name: Install postgresql-server
+    
+    # Do the initial postgresql config & start the service & allow the traffic through the firewall
+
+    # - name: Allow the traffic through the firewall
+
+    # - name: Create podman container using pgadmin_container

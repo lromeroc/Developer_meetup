@@ -1,0 +1,54 @@
+---
+- name: Configure VLANs
+  hosts: arista
+  gather_facts: false
+
+  vars:
+
+    vlan_config:
+      state: merged
+      config:
+        - name: desktops
+          vlan_id: 20
+        - name: servers
+          vlan_id: 30
+        - name: printers
+          vlan_id: 40
+        - name: DMZ
+          vlan_id: 50
+
+
+  tasks:
+
+    # - name: Confgure vlans using vlan_config vars
+    - name: Confgure vlans using vlan_config vars
+      arista.eos.eos_vlans:
+        config: "{{ vlan_config.config }}"
+        state: "{{ vlan_config.state }}"
+    
+
+    # - name: Backup network configuration to /test/dir
+    - name: Backup network configuration to /test/dir
+      arista.eos.eos_config:
+        backup: true
+        backup_options:
+          filename: /test/dir/network_backup.cfg
+          dir_path: /test/dir
+      register: backup_network_config
+    
+
+    # - name: Gather arista eos facts & display facts
+    - name: Gather arista eos facts
+      arista.eos.eos_facts:
+        gather_subset:
+          - '!all'
+          - '!min'
+        gather_network_resources:
+          - vlans
+
+    - name: Display facts
+      ansible.builtin.debug:
+        msg: "{{ ansible_facts }}"
+    
+
+    # - name: Display arista eos facts
