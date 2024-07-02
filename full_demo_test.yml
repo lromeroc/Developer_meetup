@@ -15,7 +15,7 @@
         assign_public_ip: true
       tags:
         function: demo-lightspeed
-      security_group: secgroup-lightspeed
+      security_group: default
       wait: true
   tasks:
     # - name: Get vpc id from aws instance and register
