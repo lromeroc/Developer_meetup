@@ -19,18 +19,12 @@
       wait: true
   tasks:
     # - name: Get vpc id from aws instance and register
-    - name: Get vpc id from aws instance and register
-      amazon.aws.ec2_vpc_net_info:
-        filters:
-          tag:Name: "{{ vpc_name }}"
-      register: vpc_info
 
-    # - name: create security group in aws with vpc id
-    - name: Create security group in aws with vpc id
+    # - name: create security group secgroup-lightspeed in aws 
+    - name: Create security group secgroup-lightspeed in aws
       amazon.aws.ec2_security_group:
-        name: "{{ _name_ }}"
-        description: "{{ _description_ }}"
-        vpc_id: "{{ vpc_info.vpcs[0].id }}"
+        name: secgroup-lightspeed
+        description: security group for demo-lightspeed
         rules:
           - proto: tcp
             from_port: 22
@@ -54,7 +48,7 @@
             cidr_ip: 0.0.0.0/0
           - proto: tcp
             from_port: 5001
-            to_port:
+            to_port: 5001
 
 
     # - name: Create ssh keypair named lightspeed-keypair
