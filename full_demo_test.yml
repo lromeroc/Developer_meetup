@@ -20,7 +20,7 @@
   tasks:
     # - name: get aws vpc id
     - name: Get aws vpc id
-      ec2_vpc_net_facts:
+      amazon.aws.ec2_vpc_net_facts:
         region: us-east-1
         filters:
           tag:Name: "{{ vpc_name }}"
