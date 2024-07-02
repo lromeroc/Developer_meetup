@@ -22,6 +22,16 @@
 
     # - name: create security group secgroup-lightspeed in aws with group id
 
+    # - name: create vpc subnet
+    - name: Create vpc subnet
+      amazon.aws.ec2_vpc_subnet:
+        state: present
+        vpc_id: vpc-016eb5d644c333ccb
+        cidr: 10.0.1.48/24
+        az: us-east-1a
+        resource_tags:
+          Name: "{{ ec2_instance.name }}"
+
     # - name: Create ssh keypair named lightspeed-keypair
     - name: Create ssh keypair named lightspeed-keypair
       amazon.aws.ec2_key:
