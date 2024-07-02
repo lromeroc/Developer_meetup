@@ -18,10 +18,9 @@
       security_group: secgroup-lightspeed
       wait: true
   tasks:
-    # - name: get aws vpc id
-    - name: Get aws vpc id
-      amazon.aws.ec2_vpc_net_facts:
-        region: us-east-1
+    # - name: Get vpc id from aws instance and register
+    - name: Get vpc id from aws instance and register
+      amazon.aws.ec2_vpc_net_info:
         filters:
           tag:Name: "{{ vpc_name }}"
       register: vpc_info
