@@ -1,0 +1,139 @@
+---
+- name: Configure a VM in AWS named RHEL-VM
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Create a new EC2 instance
+      ec2:
+        aws_access_key: "{{ _aws_access_key_ }}"
+        aws_secret_key: "{{ _aws_secret_key_ }}"
+        key_name: "{{ _key_name_ }}"
+        instance_type: "{{ instance_type }}"
+        image: "{{ image }}"
+        wait: true
+        region: "{{ region }}"
+        group: "{{ group }}"
+        count: 1
+        vpc_subnet_id: "{{ vpc_subnet_id }}"
+        assign_public_ip: true
+        instance_tags:
+          Name: RHEL-VM
+      register: ec2
+    - name: Add new instance to host group
+      ansible.builtin.add_host:
+        hostname: "{{ _hostname_ }}"
+        groupname: "{{ ec2.instances }}"
+- name: Wait for SSH to come up
+  hosts: launched
+  gather_facts: false
+  tasks:
+    - name: Wait for SSH to come up
+      ansible.builtin.wait_for_connection:
+        delay: 10
+        timeout: 300
+- name: Configure RHEL-VM
+  hosts: launched
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Install EPEL repository
+      ansible.builtin.package:
+        name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+        state: present
+    - name: Install Ansible
+      ansible.builtin.package:
+        name: ansible
+        state: present
+    - name: Install git
+      ansible.builtin.package:
+        name: git
+        state: present
+    - name: Install vim
+      ansible.builtin.package:
+        name: vim
+        state: present
+    - name: Install tree
+      ansible.builtin.package:
+        name: tree
+        state: present
+    - name: Install wget
+      ansible.builtin.package:
+        name: wget
+        state: present
+    - name: Install net-tools
+      ansible.builtin.package:
+        name: net-tools
+        state: present
+    - name: Install bind-utils
+      ansible.builtin.package:
+        name: bind-utils
+        state: present
+    - name: Install telnet
+      ansible.builtin.package:
+        name: telnet
+        state: present
+    - name: Install htop
+      ansible.builtin.package:
+        name: htop
+        state: present
+    - name: Install tmux
+      ansible.builtin.package:
+        name: tmux
+        state: present
+    - name: Install nano
+      ansible.builtin.package:
+        name: nano
+        state: present
+    - name: Install unzip
+      ansible.builtin.package:
+        name: unzip
+        state: present
+    - name: Install zip
+      ansible.builtin.package:
+        name: zip
+        state: present
+    - name: Install bzip2
+      ansible.builtin.package:
+        name: bzip2
+        state: present
+    - name: Install rsync
+      ansible.builtin.package:
+        name: rsync
+        state: present
+    - name: Install lsof
+      ansible.builtin.package:
+        name: lsof
+        state: present
+    - name: Install psmisc
+      ansible.builtin.package:
+        name: psmisc
+        state: present
+    - name: Install ncdu
+      ansible.builtin.package:
+        name: ncdu
+        state: present
+    - name: Install iftop
+      ansible.builtin.package:
+        name: iftop
+        state: present
+    - name: Install iotop
+      ansible.builtin.package:
+        name: iotop
+        state: present
+    - name: Install sysstat
+      ansible.builtin.package:
+        name: sysstat
+        state: present
+    - name: Install dstat
+      ansible.builtin.package:
+        name: dstat
+        state: present
+    - name: Install atop
+      ansible.builtin.package:
+        name: atop
+        state: present
+    - name: Install iptraf
+      ansible.builtin.yum:
+        name: iptraf
+        state: "{{ _state_ }}"

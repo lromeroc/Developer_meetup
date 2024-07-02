@@ -1,0 +1,21 @@
+---
+- name: Install Cockpit
+  hosts: all
+  tasks:
+    - name: Install Cockpit
+      ansible.builtin.package:
+        name: cockpit
+        state: present
+    - name: Copy Cockpit configuration file
+      ansible.builtin.copy:
+        src: /etc/cockpit/cockpit.conf.example
+        dest: /etc/cockpit/cockpit.conf
+        remote_src: true
+        owner: root
+        group: root
+        mode: "0644"
+    - name: Enable and start Cockpit service
+      ansible.builtin.service:
+        name: cockpit
+        state: started
+        enabled: true

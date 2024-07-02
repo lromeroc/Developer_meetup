@@ -23,8 +23,42 @@
   tasks:
 
     # Gather info from subnet called subnet-lightspeed & create vpc_subnet_id var
+    - name: Gather info from subnet called subnet-lightspeed
+      amazon.aws.ec2_vpc_subnet_info:
+        filters:
+          vpc-id: vpc-016eb5d644c333ccb
+      register: subnet_info
+
+    - name: Create vpc_subnet_id var
+      ansible.builtin.set_fact:
+        vpc_subnet_id: "{{ subnet_info.subnets[0].id }}"
+
 
     # - name: Provision t3.small instance using ec2_instance var
+    - name: Provision t3.small instance using ec2_instance var
+      amazon.aws.ec2_instance:
+        name: "{{ ec2_instance.name }}"
+        key_name: "{{ _key_name_ }}"
+        image_id: "{{ ec2_instance.image_id }}"
+        network: "{{ ec2_instance.network }}"
+        security_group: "{{ ec2_instance.security_group }}"
+        wait: "{{ ec2_instance.wait }}"
+        instance_type: t3.small
+        vpc_subnet_id: "{{ vpc_subnet_id }}"
+        tags: "{{ ec2_instance.tags }}"
+      register: ec2_instance_info
+
 
     # Create var from public_ip_address with retry & print it out
+    - name: Create var from public_ip_address with retry
+      ansible.builtin.set_fact:
+        public_ip_address: "{{ ec2_instance_info.instances[0].public_ip_address }}"
+      retries: 10
+      delay: 10
+      until: public_ip_address is defined
+
+    - name: Print it out
+      ansible.builtin.debug:
+        msg: "{{ public_ip_address }}"
+
 

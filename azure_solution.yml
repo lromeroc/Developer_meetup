@@ -33,3 +33,5 @@
         ssh_public_keys: "{{ vm_config.ssh_public_keys }}"
         image: "{{ vm_config.image }}"
         network_interfaces: "{{ vm_config.network_interfaces }}"
+    
+    

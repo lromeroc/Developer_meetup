@@ -1,0 +1,182 @@
+---
+- name: Configure a VM in AWS name RHEL-VM
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  module_defaults:
+    group/aws:
+      region: us-east-1
+  vars:
+    ec2_instance:
+      name: instance-lightspeed-01
+      key_name: lightspeed-keypair
+      image_id: ami-016eb5d644c333ccb # RHEL 9 us-east-1
+      network:
+        assign_public_ip: true
+      tags:
+        function: demo-lightspeed
+      security_group: secgroup-lightspeed
+      wait: true
+  tasks:
+    # - name: create security group in aws called secgroup-lightspeed
+    - name: Create security group in aws called secgroup-lightspeed
+      amazon.aws.ec2_security_group:
+        name: secgroup-lightspeed
+        description: security group for demo-lightspeed
+        rules:
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 443
+            to_port: 443
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 8080
+            to_port: 8080
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 5000
+            to_port: 5000
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 5001
+            to_port: 5001
+    # - name: Create ssh keypair named lightspeed-keypair
+    - name: Create ssh keypair named lightspeed-keypair
+      amazon.aws.ec2_key:
+        name: lightspeed-keypair
+        state: present
+
+    # - name: Create a new EC2 instance using ec2_instance var
+    - name: Create a new ec2 instance using ec2_instance var
+      amazon.aws.ec2_instance:
+        instance_type: t2.micro
+        image_id: "{{ ec2_instance.image_id }}"
+        key_name: "{{ _key_name_ }}"
+        network: "{{ ec2_instance.network }}"
+        tags: "{{ ec2_instance.tags }}"
+        security_group: "{{ ec2_instance.security_group }}"
+        wait: "{{ ec2_instance.wait }}"
+        wait_timeout: 1200
+        name: "{{ ec2_instance.name }}"
+      register: ec2_instance
+    
+    - name: Add new instance to host group
+      ansible.builtin.add_host:
+        hostname: "{{ _hostname_ }}"
+        groupname: "{{ ec2.instances }}"
+- name: Wait for SSH to come up
+  hosts: launched
+  gather_facts: false
+  tasks:
+    - name: Wait for SSH to come up
+      ansible.builtin.wait_for_connection:
+        delay: 10
+        timeout: 300
+- name: Configure RHEL-VM
+  hosts: launched
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Install EPEL repository
+      ansible.builtin.package:
+        name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+        state: present
+    - name: Install Ansible
+      ansible.builtin.package:
+        name: ansible
+        state: present
+    - name: Install git
+      ansible.builtin.package:
+        name: git
+        state: present
+    - name: Install vim
+      ansible.builtin.package:
+        name: vim
+        state: present
+    - name: Install tree
+      ansible.builtin.package:
+        name: tree
+        state: present
+    - name: Install wget
+      ansible.builtin.package:
+        name: wget
+        state: present
+    - name: Install net-tools
+      ansible.builtin.package:
+        name: net-tools
+        state: present
+    - name: Install bind-utils
+      ansible.builtin.package:
+        name: bind-utils
+        state: present
+    - name: Install telnet
+      ansible.builtin.package:
+        name: telnet
+        state: present
+    - name: Install htop
+      ansible.builtin.package:
+        name: htop
+        state: present
+    - name: Install psmisc
+      ansible.builtin.package:
+        name: psmisc
+        state: present
+    - name: Install bash-completion
+      ansible.builtin.package:
+        name: bash-completion
+        state: present
+    - name: Install tmux
+      ansible.builtin.package:
+        name: tmux
+        state: present
+    - name: Install nano
+      ansible.builtin.package:
+        name: nano
+        state: present
+    - name: Install lsof
+      ansible.builtin.package:
+        name: lsof
+        state: present
+    - name: Install unzip
+      ansible.builtin.package:
+        name: unzip
+        state: present
+    - name: Install zip
+      ansible.builtin.package:
+        name: zip
+        state: present
+    - name: Install bzip2
+      ansible.builtin.package:
+        name: bzip2
+        state: present
+    - name: Install rsync
+      ansible.builtin.package:
+        name: rsync
+        state: present
+    - name: Install firewalld
+      ansible.builtin.package:
+        name: firewalld
+        state: present
+    - name: Start and enable firewalld
+      ansible.builtin.systemd:
+        name: firewalld
+        state: started
+        enabled: true
+    - name: Open firewall ports for RHEL-VM
+      loop:
+        - 22/tcp
+        - 80/tcp
+        - 443/tcp
+        - 8080
+      ansible.posix.firewalld:
+        port: "{{ item }}"
+        permanent: true
+        state: enabled
+        immediate: true

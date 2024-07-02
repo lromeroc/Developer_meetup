@@ -1,0 +1,24 @@
+---
+- name: Install postgres and configure postgres then start and enable the service then allow traffic through firewall 5432
+  hosts: all
+  become: true
+  tasks:
+    - name: Install postgres
+      ansible.builtin.package:
+        name: postgresql
+        state: present
+    - name: Configure postgres
+      ansible.builtin.lineinfile:
+        path: /etc/postgresql/14/main/postgresql.conf
+        regexp: ^listen_addresses
+        line: listen_addresses = '*'
+    - name: Start and enable postgres service
+      ansible.builtin.service:
+        name: postgresql
+        state: started
+        enabled: true
+    - name: Allow traffic through firewall 5432
+      community.general.ufw:
+        rule: allow
+        port: "{{ _port_ }}"
+        proto: tcp
