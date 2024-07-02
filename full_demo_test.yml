@@ -20,36 +20,7 @@
   tasks:
     # - name: Get vpc id from aws instance and register
 
-    # - name: create security group secgroup-lightspeed in aws 
-    - name: Create security group secgroup-lightspeed in aws
-      amazon.aws.ec2_security_group:
-        name: secgroup-lightspeed
-        description: security group for demo-lightspeed
-        rules:
-          - proto: tcp
-            from_port: 22
-            to_port: 22
-            cidr_ip: 0.0.0.0/0
-          - proto: tcp
-            from_port: 80
-            to_port: 80
-            cidr_ip: 0.0.0.0/0
-          - proto: tcp
-            from_port: 443
-            to_port: 443
-            cidr_ip: 0.0.0.0/0
-          - proto: tcp
-            from_port: 8080
-            to_port: 8080
-            cidr_ip: 0.0.0.0/0
-          - proto: tcp
-            from_port: 5000
-            to_port: 5000
-            cidr_ip: 0.0.0.0/0
-          - proto: tcp
-            from_port: 5001
-            to_port: 5001
-
+    # - name: create security group secgroup-lightspeed in aws with group id
 
     # - name: Create ssh keypair named lightspeed-keypair
     - name: Create ssh keypair named lightspeed-keypair
