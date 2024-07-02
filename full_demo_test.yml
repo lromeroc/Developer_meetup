@@ -33,7 +33,7 @@
       amazon.aws.ec2_instance:
         instance_type: t2.micro
         image_id: "{{ ec2_instance.image_id }}"
-        key_name: "{{ _key_name_ }}"
+        key_name: "{{ ec2_instance._key_name_ }}"
         network: "{{ ec2_instance.network }}"
         tags: "{{ ec2_instance.tags }}"
         security_group: "{{ ec2_instance.security_group }}"
